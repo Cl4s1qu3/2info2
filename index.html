@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2info2</title>
+<style>
+    /* عام للصفحة */
+    body {
+        font-family: Arial, sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+        margin: 0;
+        padding: 0;
+    }
+
+    body.dark {
+        background-color: #121212;
+        color: #f5f5f5;
+    }
+
+    /* العنوان */
+    h1 {
+        text-align: center;
+    }
+
+    h1 span:first-child {
+        font-size: 60px;
+        font-weight: bold;
+    }
+
+    h1 span:last-child {
+        font-size: 24px;
+    }
+
+    /* زر Today Courses */
+    .today-btn {
+        display: inline-block;
+        background: linear-gradient(45deg, #ff416c, #ff4b2b);
+        color: #fff;
+        font-size: 28px;
+        font-weight: bold;
+        padding: 25px 50px;
+        border-radius: 15px;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        margin: 50px 0;
+    }
+
+    .today-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 30px rgba(255,75,43,0.6);
+    }
+
+    body.dark .today-btn {
+        box-shadow: 0 8px 20px rgba(255,75,43,0.8);
+    }
+
+    /* Cards المواد */
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        padding: 0 10px;
+    }
+
+    .card {
+        border:1px solid #ddd;
+        padding:20px;
+        width:200px;
+        border-radius:10px;
+        text-align:center;
+        transition: all 0.3s;
+        cursor:pointer;
+        background-color: #fff;
+    }
+
+    .card h3 {
+        color:#007bff;
+        margin: 10px 0;
+    }
+
+    .card p {
+        margin: 0;
+    }
+
+    .card:hover {
+        transform: scale(1.05) rotate(-1deg);
+    }
+
+    body.dark .card {
+        background-color: #1e1e1e;
+        border-color: #555;
+        color: #f5f5f5;
+    }
+
+    /* Update Notice */
+    .update-notice {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 15px 25px;
+        border-left: 6px solid #28a745;
+        color: #333;
+        margin: 30px 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .update-notice .version {
+        color: #28a745;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    body.dark .update-notice {
+        background-color: #2a2a2a;
+        color: #f5f5f5;
+        border-left-color: #66ff66;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    /* About Section */
+    section.about {
+        text-align: center;
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    section.about h2 {
+        color:#007bff;
+        margin-bottom: 20px;
+    }
+
+    section.about p {
+        font-size: 16px;
+        line-height: 1.6;
+        color:#555;
+        transition: color 0.3s;
+    }
+
+    body.dark section.about p {
+        color: #f5f5f5;
+    }
+
+    /* زر Dark Mode */
+    #modeBtn {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        background-color: #000;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s;
+        z-index: 999;
+    }
+</style>
+</head>
+<body>
+
+<h1>
+    <span>2</span>
+    <span> info2 cours</span>
+</h1>
+
+<div style="text-align: center;">
+    <a href="today-cour.html" class="today-btn">
+       Today Courses
+    </a>
+</div>
+
+<button id="modeBtn">Dark Mode</button>
+
+<p id="datetime" style="text-align: center; font-size: 20px; font-weight: bold;"></p>
+
+<!-- قسم Categories / Matières -->
+<h2 style="text-align: center;">Course Categories</h2>
+<div class="cards">
+    <div class="card" onclick="location.href='matyart/francais.html'"><h3>Français</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/arabe.html'"><h3>Arabe</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/histoire.html'"><h3>Histoire</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/geographie.html'"><h3>Géographie</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/info.html'"><h3>Info</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/technique.html'"><h3>Technique</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/english.html'"><h3>English</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/physique.html'"><h3>Physique</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/math.html'"><h3>Math</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/tarbiya.html'"><h3>Tarbiya Madaniya</h3><p>View Courses</p></div>
+    <div class="card" onclick="location.href='matyart/islamic.html'"><h3>Tfkir Islami</h3><p>View Courses</p></div>
+</div>
+
+<!-- Update Notice -->
+<div class="update-notice">
+    Our website page is now live – <span class="version">Version 1.0</span>
+</div>
+
+<!-- خط أفقي -->
+<hr style="margin: 40px 0; border: 1px solid #ddd;">
+
+<!-- About Page -->
+<section class="about">
+    <h2>About This Page</h2>
+    <p>
+        Welcome to <strong>2info2 Cours</strong> – your complete class learning platform.  
+        Here, you can find all lessons for every subject, organized and easy to access.  
+        Whether you missed a class or want to review, this page ensures you never fall behind.  
+        Explore the categories above to access detailed lessons and stay on track with your studies.
+    </p>
+</section>
+
+<script>
+    // Dark Mode Toggle
+    const modeBtn = document.getElementById("modeBtn");
+    modeBtn.onclick = () => {
+        document.body.classList.toggle("dark");
+        const cards = document.querySelectorAll(".card");
+        if (document.body.classList.contains("dark")) {
+            modeBtn.innerText = "Light Mode";
+            modeBtn.style.backgroundColor = "#fff";
+            modeBtn.style.color = "#000";
+            cards.forEach(c => c.style.borderColor = "#555");
+        } else {
+            modeBtn.innerText = "Dark Mode";
+            modeBtn.style.backgroundColor = "#000";
+            modeBtn.style.color = "#fff";
+            cards.forEach(c => c.style.borderColor = "#ddd");
+        }
+    };
+
+    // Display Date and Time
+    function updateDateTime() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const date = now.toLocaleDateString('en-EN', options);
+        const time = now.toLocaleTimeString();
+        document.getElementById("datetime").innerHTML = date + " - " + time;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+</script>
+
+</body>
+</html>
