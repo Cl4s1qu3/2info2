@@ -1,251 +1,665 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2info2</title>
-<style>
-    /* عام للصفحة */
-    body {
-        font-family: Arial, sans-serif;
-        transition: background-color 0.3s, color 0.3s;
-        margin: 0;
-        padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2info2 - Your Learning Platform</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s, color 0.3s, background-image 0.8s;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
 
-    body.dark {
-        background-color: #121212;
-        color: #f5f5f5;
-    }
+        body.dark {
+            background-color: #121212;
+            color: #f5f5f5;
+            background-image: linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%);
+        }
 
-    /* العنوان */
-    h1 {
-        text-align: center;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
 
-    h1 span:first-child {
-        font-size: 60px;
-        font-weight: bold;
-    }
+        /* Header */
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #36d1dc, #5b86e5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
 
-    h1 span:last-child {
-        font-size: 24px;
-    }
+        h1 span:first-child {
+            font-size: 4rem;
+            font-weight: bold;
+        }
 
-    /* زر Today Courses */
-    .today-btn {
-        display: inline-block;
-        background: linear-gradient(45deg, #ff416c, #ff4b2b);
-        color: #fff;
-        font-size: 28px;
-        font-weight: bold;
-        padding: 25px 50px;
-        border-radius: 15px;
-        text-decoration: none;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        transition: all 0.3s ease;
-        margin: 50px 0;
-    }
+        h1 span:last-child {
+            font-size: 2rem;
+        }
 
-    .today-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 12px 30px rgba(255,75,43,0.6);
-    }
+        /* Today Courses Button */
+        .today-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 25px 50px;
+            border-radius: 15px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-    body.dark .today-btn {
-        box-shadow: 0 8px 20px rgba(255,75,43,0.8);
-    }
+        .today-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(255,75,43,0.6);
+        }
 
-    /* Cards المواد */
-    .cards {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-        padding: 0 10px;
-    }
+        .today-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
 
-    .card {
-        border:1px solid #ddd;
-        padding:20px;
-        width:200px;
-        border-radius:10px;
-        text-align:center;
-        transition: all 0.3s;
-        cursor:pointer;
-        background-color: #fff;
-    }
+        .today-btn:hover::after {
+            left: 100%;
+        }
 
-    .card h3 {
-        color:#007bff;
-        margin: 10px 0;
-    }
+        body.dark .today-btn {
+            box-shadow: 0 8px 20px rgba(255,75,43,0.8);
+        }
 
-    .card p {
-        margin: 0;
-    }
+        /* Subject Cards */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 0 10px;
+            margin-top: 30px;
+        }
 
-    .card:hover {
-        transform: scale(1.05) rotate(-1deg);
-    }
+        .card {
+            border: 1px solid #ddd;
+            padding: 25px;
+            width: 200px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
 
-    body.dark .card {
-        background-color: #1e1e1e;
-        border-color: #555;
-        color: #f5f5f5;
-    }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(45deg, #36d1dc, #5b86e5);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
 
-    /* Update Notice */
-    .update-notice {
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        padding: 15px 25px;
-        border-left: 6px solid #28a745;
-        color: #333;
-        margin: 30px 10px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+        .card:hover::before {
+            transform: scaleX(1);
+        }
 
-    .update-notice .version {
-        color: #28a745;
-        font-weight: bold;
-        margin-left: 10px;
-    }
+        .card h3 {
+            color: #007bff;
+            margin: 10px 0;
+            font-size: 1.4rem;
+            transition: color 0.3s;
+        }
 
-    body.dark .update-notice {
-        background-color: #2a2a2a;
-        color: #f5f5f5;
-        border-left-color: #66ff66;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    }
+        .card p {
+            margin: 0;
+            color: #666;
+            transition: color 0.3s;
+        }
 
-    /* About Section */
-    section.about {
-        text-align: center;
-        max-width: 800px;
-        margin: auto;
-        padding: 20px;
-    }
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
 
-    section.about h2 {
-        color:#007bff;
-        margin-bottom: 20px;
-    }
+        .card:hover h3 {
+            color: #ff416c;
+        }
 
-    section.about p {
-        font-size: 16px;
-        line-height: 1.6;
-        color:#555;
-        transition: color 0.3s;
-    }
+        body.dark .card {
+            background-color: #1e1e1e;
+            border-color: #555;
+            color: #f5f5f5;
+        }
 
-    body.dark section.about p {
-        color: #f5f5f5;
-    }
+        body.dark .card p {
+            color: #bbb;
+        }
 
-    /* زر Dark Mode */
-    #modeBtn {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        padding: 8px 14px;
-        border: none;
-        border-radius: 6px;
-        background-color: #000;
-        color: #fff;
-        cursor: pointer;
-        transition: all 0.3s;
-        z-index: 999;
-    }
-</style>
+        /* Improved Subject Backgrounds */
+        .arabic-bg {
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 123, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 123, 255, 0.1) 0%, transparent 20%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="30" font-family="Arial" font-size="14" fill="rgba(0,123,255,0.08)">ا</text><text x="30" y="50" font-family="Arial" font-size="14" fill="rgba(0,123,255,0.08)">ب</text><text x="50" y="70" font-family="Arial" font-size="14" fill="rgba(0,123,255,0.08)">ت</text><text x="70" y="30" font-family="Arial" font-size="14" fill="rgba(0,123,255,0.08)">ث</text><text x="10" y="70" font-family="Arial" font-size="14" fill="rgba(0,123,255,0.08)">ج</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.arabic-bg {
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="30" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.08)">ا</text><text x="30" y="50" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.08)">ب</text><text x="50" y="70" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.08)">ت</text><text x="70" y="30" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.08)">ث</text><text x="10" y="70" font-family="Arial" font-size="14" fill="rgba(255,255,255,0.08)">ج</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .french-bg {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="25" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">Bonjour</text><text x="60" y="45" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">Merci</text><text x="20" y="65" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">Au revoir</text><text x="70" y="85" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">Paris</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.french-bg {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="25" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">Bonjour</text><text x="60" y="45" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">Merci</text><text x="20" y="65" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">Au revoir</text><text x="70" y="85" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">Paris</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .math-bg {
+            background-image: 
+                radial-gradient(circle at 30% 40%, rgba(0, 123, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="16" fill="rgba(0,123,255,0.08)">π</text><text x="45" y="45" font-family="Arial" font-size="16" fill="rgba(0,123,255,0.08)">∑</text><text x="75" y="65" font-family="Arial" font-size="16" fill="rgba(0,123,255,0.08)">∫</text><text x="25" y="85" font-family="Arial" font-size="16" fill="rgba(0,123,255,0.08)">∞</text><text x="65" y="25" font-family="Arial" font-size="16" fill="rgba(0,123,255,0.08)">√</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.math-bg {
+            background-image: 
+                radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.08)">π</text><text x="45" y="45" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.08)">∑</text><text x="75" y="65" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.08)">∫</text><text x="25" y="85" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.08)">∞</text><text x="65" y="25" font-family="Arial" font-size="16" fill="rgba(255,255,255,0.08)">√</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .info-bg {
+            background-image: 
+                radial-gradient(circle at 70% 20%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 30% 80%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="25" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">def</text><text x="10" y="40" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">class</text><text x="10" y="55" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">import</text><text x="60" y="25" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">int main</text><text x="60" y="40" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">cout</text><text x="60" y="70" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">html</text><text x="60" y="85" font-family="Courier" font-size="10" fill="rgba(0,123,255,0.08)">css</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.info-bg {
+            background-image: 
+                radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 30% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="25" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">def</text><text x="10" y="40" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">class</text><text x="10" y="55" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">import</text><text x="60" y="25" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">int main</text><text x="60" y="40" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">cout</text><text x="60" y="70" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">html</text><text x="60" y="85" font-family="Courier" font-size="10" fill="rgba(255,255,255,0.08)">css</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .english-bg {
+            background-image: 
+                radial-gradient(circle at 40% 60%, rgba(0, 123, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="11" fill="rgba(0,123,255,0.08)">Grammar</text><text x="65" y="40" font-family="Arial" font-size="11" fill="rgba(0,123,255,0.08)">Vocabulary</text><text x="25" y="60" font-family="Arial" font-size="11" fill="rgba(0,123,255,0.08)">Literature</text><text x="55" y="80" font-family="Arial" font-size="11" fill="rgba(0,123,255,0.08)">Writing</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.english-bg {
+            background-image: 
+                radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.08)">Grammar</text><text x="65" y="40" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.08)">Vocabulary</text><text x="25" y="60" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.08)">Literature</text><text x="55" y="80" font-family="Arial" font-size="11" fill="rgba(255,255,255,0.08)">Writing</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .history-bg {
+            background-image: 
+                radial-gradient(circle at 60% 30%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 40% 70%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">1776</text><text x="65" y="40" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">1492</text><text x="25" y="60" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">1066</text><text x="55" y="80" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">1945</text><text x="75" y="25" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">476</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.history-bg {
+            background-image: 
+                radial-gradient(circle at 60% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">1776</text><text x="65" y="40" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">1492</text><text x="25" y="60" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">1066</text><text x="55" y="80" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">1945</text><text x="75" y="25" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">476</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .geography-bg {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(0, 123, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,50 Q50,10 90,50 Q50,90 10,50 Z" fill="none" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><circle cx="30" cy="30" r="3" fill="rgba(0,123,255,0.08)"/><circle cx="70" cy="30" r="3" fill="rgba(0,123,255,0.08)"/><circle cx="50" cy="70" r="3" fill="rgba(0,123,255,0.08)"/><text x="25" y="25" font-family="Arial" font-size="8" fill="rgba(0,123,255,0.08)">Mtn</text><text x="65" y="25" font-family="Arial" font-size="8" fill="rgba(0,123,255,0.08)">Sea</text><text x="45" y="75" font-family="Arial" font-size="8" fill="rgba(0,123,255,0.08)">River</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.geography-bg {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,50 Q50,10 90,50 Q50,90 10,50 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><circle cx="30" cy="30" r="3" fill="rgba(255,255,255,0.08)"/><circle cx="70" cy="30" r="3" fill="rgba(255,255,255,0.08)"/><circle cx="50" cy="70" r="3" fill="rgba(255,255,255,0.08)"/><text x="25" y="25" font-family="Arial" font-size="8" fill="rgba(255,255,255,0.08)">Mtn</text><text x="65" y="25" font-family="Arial" font-size="8" fill="rgba(255,255,255,0.08)">Sea</text><text x="45" y="75" font-family="Arial" font-size="8" fill="rgba(255,255,255,0.08)">River</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .physics-bg {
+            background-image: 
+                radial-gradient(circle at 80% 40%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">E=mc²</text><text x="65" y="40" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">F=ma</text><text x="25" y="60" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">p=mv</text><text x="55" y="80" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">V=IR</text><text x="75" y="25" font-family="Arial" font-size="12" fill="rgba(0,123,255,0.08)">λ=h/p</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.physics-bg {
+            background-image: 
+                radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="15" y="25" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">E=mc²</text><text x="65" y="40" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">F=ma</text><text x="25" y="60" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">p=mv</text><text x="55" y="80" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">V=IR</text><text x="75" y="25" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.08)">λ=h/p</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .technique-bg {
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 123, 255, 0.1) 0%, transparent 35%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="20" y="20" width="15" height="15" fill="none" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><circle cx="60" cy="30" r="8" fill="none" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><line x1="40" y1="60" x2="60" y2="40" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><polygon points="70,70 85,65 80,80" fill="none" stroke="rgba(0,123,255,0.08)" stroke-width="1"/></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.technique-bg {
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 35%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="20" y="20" width="15" height="15" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><circle cx="60" cy="30" r="8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><line x1="40" y1="60" x2="60" y2="40" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><polygon points="70,70 85,65 80,80" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .civics-bg {
+            background-image: 
+                radial-gradient(circle at 30% 70%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 70% 30%, rgba(0, 123, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="25" y="25" width="50" height="35" fill="none" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><line x1="25" y1="40" x2="75" y2="40" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><line x1="25" y1="55" x2="75" y2="55" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><text x="40" y="75" font-family="Arial" font-size="10" fill="rgba(0,123,255,0.08)">Citizen</text><text x="35" y="90" font-family="Arial" font-size="10" fill="rgba(0,123,255,0.08)">Rights</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.civics-bg {
+            background-image: 
+                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="25" y="25" width="50" height="35" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><line x1="25" y1="40" x2="75" y2="40" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><line x1="25" y1="55" x2="75" y2="55" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><text x="40" y="75" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.08)">Citizen</text><text x="35" y="90" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.08)">Rights</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        .islamic-bg {
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 123, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50,20 L60,40 L80,40 L65,55 L70,75 L50,65 L30,75 L35,55 L20,40 L40,40 Z" fill="none" stroke="rgba(0,123,255,0.08)" stroke-width="1"/><text x="42" y="90" font-family="Arial" font-size="10" fill="rgba(0,123,255,0.08)">Islam</text></svg>'),
+                linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
+
+        body.dark.islamic-bg {
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 30%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50,20 L60,40 L80,40 L65,55 L70,75 L50,65 L30,75 L35,55 L20,40 L40,40 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><text x="42" y="90" font-family="Arial" font-size="10" fill="rgba(255,255,255,0.08)">Islam</text></svg>'),
+                linear-gradient(135deg, #0c0c0c 0%, #2d3436 100%) !important;
+        }
+
+        /* Update Notice */
+        .update-notice {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 15px 25px;
+            border-left: 6px solid #28a745;
+            color: #333;
+            margin: 30px 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .update-notice .version {
+            color: #28a745;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        body.dark .update-notice {
+            background-color: #2a2a2a;
+            color: #f5f5f5;
+            border-left-color: #66ff66;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* About Section */
+        section.about {
+            text-align: center;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        section.about h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        section.about p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        body.dark section.about p {
+            color: #f5f5f5;
+        }
+
+        /* Dark Mode Button */
+        #modeBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #000;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 999;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        #modeBtn:hover {
+            transform: scale(1.05);
+        }
+
+        body.dark #modeBtn {
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* Date and Time */
+        #datetime {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        body.dark #datetime {
+            background: rgba(30,30,30,0.7);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h1 span:first-child {
+                font-size: 3rem;
+            }
+            
+            h1 span:last-child {
+                font-size: 1.5rem;
+            }
+            
+            .today-btn {
+                font-size: 22px;
+                padding: 20px 40px;
+            }
+            
+            .card {
+                width: 150px;
+                padding: 20px;
+            }
+            
+            #modeBtn {
+                top: 10px;
+                right: 10px;
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="container">
+        <h1>
+            <span>2</span>
+            <span> info2 cours</span>
+        </h1>
 
-<h1>
-    <span>2</span>
-    <span> info2 cours</span>
-</h1>
+        <div style="text-align: center;">
+            <a href="today-cour.html" class="today-btn">
+               Today Courses
+            </a>
+        </div>
 
-<div style="text-align: center;">
-    <a href="today-cour.html" class="today-btn">
-       Today Courses
-    </a>
-</div>
+        <button id="modeBtn">Dark Mode</button>
 
-<button id="modeBtn">Dark Mode</button>
+        <p id="datetime" style="text-align: center; font-size: 20px; font-weight: bold;"></p>
 
-<p id="datetime" style="text-align: center; font-size: 20px; font-weight: bold;"></p>
+        <!-- Course Categories -->
+        <h2 style="text-align: center; font-size: 2rem; margin-top: 40px;">Course Categories</h2>
+        <div class="cards">
+            <div class="card" data-subject="french"><h3>Français</h3><p>View Courses</p></div>
+            <div class="card" data-subject="arabic"><h3>Arabe</h3><p>View Courses</p></div>
+            <div class="card" data-subject="history"><h3>Histoire</h3><p>View Courses</p></div>
+            <div class="card" data-subject="geography"><h3>Géographie</h3><p>View Courses</p></div>
+            <div class="card" data-subject="info"><h3>Info</h3><p>View Courses</p></div>
+            <div class="card" data-subject="technique"><h3>Technique</h3><p>View Courses</p></div>
+            <div class="card" data-subject="english"><h3>English</h3><p>View Courses</p></div>
+            <div class="card" data-subject="physics"><h3>Physique</h3><p>View Courses</p></div>
+            <div class="card" data-subject="math"><h3>Math</h3><p>View Courses</p></div>
+            <div class="card" data-subject="civics"><h3>Tarbiya Madaniya</h3><p>View Courses</p></div>
+            <div class="card" data-subject="islamic"><h3>Tfkir Islami</h3><p>View Courses</p></div>
+        </div>
 
-<!-- قسم Categories / Matières -->
-<h2 style="text-align: center;">Course Categories</h2>
-<div class="cards">
-    <div class="card" onclick="location.href='matyart/francais.html'"><h3>Français</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/arabe.html'"><h3>Arabe</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/histoire.html'"><h3>Histoire</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/geographie.html'"><h3>Géographie</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/info.html'"><h3>Info</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/technique.html'"><h3>Technique</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/english.html'"><h3>English</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/physique.html'"><h3>Physique</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/math.html'"><h3>Math</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/tarbiya.html'"><h3>Tarbiya Madaniya</h3><p>View Courses</p></div>
-    <div class="card" onclick="location.href='matyart/islamic.html'"><h3>Tfkir Islami</h3><p>View Courses</p></div>
-</div>
+        <!-- Update Notice -->
+        <div class="update-notice">
+            Our website page is now live – <span class="version">Version 1.0</span>
+        </div>
 
-<!-- Update Notice -->
-<div class="update-notice">
-    Our website page is now live – <span class="version">Version 1.0</span>
-</div>
+        <!-- Horizontal Line -->
+        <hr style="margin: 40px 0; border: 1px solid #ddd;">
 
-<!-- خط أفقي -->
-<hr style="margin: 40px 0; border: 1px solid #ddd;">
+        <!-- About Page -->
+        <section class="about">
+            <h2>About This Page</h2>
+            <p>
+                Welcome to <strong>2info2 Cours</strong> – your complete class learning platform.  
+                Here, you can find all lessons for every subject, organized and easy to access.  
+                Whether you missed a class or want to review, this page ensures you never fall behind.  
+                Explore the categories above to access detailed lessons and stay on track with your studies.
+            </p>
+        </section>
+    </div>
 
-<!-- About Page -->
-<section class="about">
-    <h2>About This Page</h2>
-    <p>
-        Welcome to <strong>2info2 Cours</strong> – your complete class learning platform.  
-        Here, you can find all lessons for every subject, organized and easy to access.  
-        Whether you missed a class or want to review, this page ensures you never fall behind.  
-        Explore the categories above to access detailed lessons and stay on track with your studies.
-    </p>
-</section>
-
-<script>
-    // Dark Mode Toggle
-    const modeBtn = document.getElementById("modeBtn");
-    modeBtn.onclick = () => {
-        document.body.classList.toggle("dark");
-        const cards = document.querySelectorAll(".card");
-        if (document.body.classList.contains("dark")) {
+    <script>
+        // Dark Mode Toggle with localStorage
+        const modeBtn = document.getElementById("modeBtn");
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark');
             modeBtn.innerText = "Light Mode";
             modeBtn.style.backgroundColor = "#fff";
             modeBtn.style.color = "#000";
-            cards.forEach(c => c.style.borderColor = "#555");
-        } else {
-            modeBtn.innerText = "Dark Mode";
-            modeBtn.style.backgroundColor = "#000";
-            modeBtn.style.color = "#fff";
-            cards.forEach(c => c.style.borderColor = "#ddd");
         }
-    };
 
-    // Display Date and Time
-    function updateDateTime() {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const date = now.toLocaleDateString('en-EN', options);
-        const time = now.toLocaleTimeString();
-        document.getElementById("datetime").innerHTML = date + " - " + time;
-    }
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-</script>
+        modeBtn.onclick = () => {
+            document.body.classList.toggle("dark");
+            if (document.body.classList.contains("dark")) {
+                localStorage.setItem('darkMode', 'true');
+                modeBtn.innerText = "Light Mode";
+                modeBtn.style.backgroundColor = "#fff";
+                modeBtn.style.color = "#000";
+            } else {
+                localStorage.setItem('darkMode', 'false');
+                modeBtn.innerText = "Dark Mode";
+                modeBtn.style.backgroundColor = "#000";
+                modeBtn.style.color = "#fff";
+            }
+        };
 
+        // Display Date and Time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const dateTime = now.toLocaleDateString('en-EN', options);
+            document.getElementById("datetime").innerHTML = 
+                `<i class="far fa-calendar-alt"></i> ${dateTime}`;
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // Update every minute
+
+        // Interactive Background Changes
+        const cards = document.querySelectorAll('.card');
+        
+        function removeBackgroundClasses() {
+            document.body.classList.remove(
+                'arabic-bg', 'french-bg', 'math-bg', 'info-bg', 
+                'english-bg', 'history-bg', 'geography-bg', 
+                'physics-bg', 'technique-bg', 'civics-bg', 'islamic-bg'
+            );
+        }
+        
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const subject = this.getAttribute('data-subject');
+                removeBackgroundClasses();
+                document.body.classList.add(`${subject}-bg`);
+                
+                // Enhanced pulse effect
+                this.style.animation = 'enhancedPulse 0.6s ease-in-out';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                removeBackgroundClasses();
+                this.style.animation = '';
+            });
+            
+            card.addEventListener('click', function() {
+                const subjectName = this.querySelector('h3').textContent;
+                // Simple notification instead of alert
+                showNotification(`Opening ${subjectName} courses...`);
+            });
+        });
+
+        // Enhanced CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes enhancedPulse {
+                0% { 
+                    transform: translateY(-10px) scale(1.05);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+                }
+                50% { 
+                    transform: translateY(-12px) scale(1.07);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                }
+                100% { 
+                    transform: translateY(-10px) scale(1.05);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+                }
+            }
+            
+            /* Simple notification style */
+            .notification {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #007bff;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            }
+            
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Notification function
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
 </body>
 </html>
