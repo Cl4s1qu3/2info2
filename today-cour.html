@@ -475,11 +475,6 @@
             border-color: var(--primary);
         }
 
-        .course-card.selected {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(255, 65, 108, 0.3);
-        }
-
         .course-icon {
             height: 80px;
             display: flex;
@@ -744,6 +739,52 @@
             color: #bbb;
         }
 
+        /* Sync Status */
+        .sync-status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .sync-status.syncing {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .sync-status.success {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .sync-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        body.dark .sync-status.syncing {
+            background: #332701;
+            color: #ffd351;
+            border-color: #665002;
+        }
+
+        body.dark .sync-status.success {
+            background: #052025;
+            color: #4fd1e5;
+            border-color: #084c58;
+        }
+
+        body.dark .sync-status.error {
+            background: #2c0b0e;
+            color: #e4606d;
+            border-color: #58151c;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -829,6 +870,9 @@
         <button id="modeBtn">
             <i class="fas fa-moon"></i> Dark Mode
         </button>
+
+        <!-- Sync Status -->
+        <div class="sync-status" id="syncStatus"></div>
 
         <!-- Admin Access Button -->
         <button class="admin-access-btn" id="adminAccessBtn">
@@ -972,6 +1016,7 @@
     <script>
         // Admin Password
         const ADMIN_PASSWORD = "admin123"; // You can change this password
+        let isAdmin = false;
 
         // Dark Mode Toggle with localStorage
         const modeBtn = document.getElementById("modeBtn");
@@ -1024,10 +1069,12 @@
         submitPasswordBtn.addEventListener('click', function() {
             const enteredPassword = adminPasswordInput.value;
             if (enteredPassword === ADMIN_PASSWORD) {
+                isAdmin = true;
                 passwordOverlay.classList.remove('active');
                 passwordProtection.classList.remove('active');
                 adminControls.classList.add('active');
                 adminPasswordInput.value = '';
+                renderCourses(); // Re-render to show admin buttons
             } else {
                 alert('Incorrect password! Please try again.');
                 adminPasswordInput.value = '';
@@ -1036,9 +1083,89 @@
         });
 
         logoutBtn.addEventListener('click', function() {
+            isAdmin = false;
             adminControls.classList.remove('active');
             hideAddCourseForm();
+            renderCourses(); // Re-render to hide admin buttons
         });
+
+        // Cloud Storage Simulation
+        const CLOUD_STORAGE_KEY = '2info2_courses_cloud';
+        let cloudData = null;
+
+        // Simulate cloud storage using localStorage (in real app, use a real backend)
+        function saveToCloud(data) {
+            try {
+                localStorage.setItem(CLOUD_STORAGE_KEY, JSON.stringify({
+                    data: data,
+                    timestamp: Date.now(),
+                    version: '1.0'
+                }));
+                return true;
+            } catch (e) {
+                console.error('Failed to save to cloud:', e);
+                return false;
+            }
+        }
+
+        function loadFromCloud() {
+            try {
+                const stored = localStorage.getItem(CLOUD_STORAGE_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    return parsed.data || [];
+                }
+            } catch (e) {
+                console.error('Failed to load from cloud:', e);
+            }
+            return [];
+        }
+
+        function syncWithCloud() {
+            showSyncStatus('Syncing with cloud...', 'syncing');
+            
+            setTimeout(() => {
+                const cloudCourses = loadFromCloud();
+                const localCourses = JSON.parse(localStorage.getItem('courses') || '[]');
+                
+                // Merge strategies: Cloud has priority for conflicts
+                const mergedCourses = [...localCourses];
+                
+                cloudCourses.forEach(cloudCourse => {
+                    const existingIndex = mergedCourses.findIndex(c => c.id === cloudCourse.id);
+                    if (existingIndex === -1) {
+                        // Add new course from cloud
+                        mergedCourses.push(cloudCourse);
+                    } else {
+                        // Update existing course with cloud data (cloud has priority)
+                        mergedCourses[existingIndex] = cloudCourse;
+                    }
+                });
+                
+                // Save merged data to both local and cloud
+                localStorage.setItem('courses', JSON.stringify(mergedCourses));
+                saveToCloud(mergedCourses);
+                
+                showSyncStatus('Data synchronized successfully!', 'success');
+                renderCourses();
+                
+                setTimeout(() => {
+                    hideSyncStatus();
+                }, 3000);
+            }, 1000);
+        }
+
+        function showSyncStatus(message, type) {
+            const syncStatus = document.getElementById('syncStatus');
+            syncStatus.textContent = message;
+            syncStatus.className = `sync-status ${type}`;
+            syncStatus.style.display = 'block';
+        }
+
+        function hideSyncStatus() {
+            const syncStatus = document.getElementById('syncStatus');
+            syncStatus.style.display = 'none';
+        }
 
         // Courses Data and Management
         let courses = JSON.parse(localStorage.getItem('courses')) || [
@@ -1088,9 +1215,12 @@
             }
         ];
 
-        // Save courses to localStorage
+        // Save courses to localStorage and cloud
         function saveCourses() {
             localStorage.setItem('courses', JSON.stringify(courses));
+            if (isAdmin) {
+                saveToCloud(courses);
+            }
         }
 
         // Render courses
@@ -1124,7 +1254,8 @@
                 courseCard.className = 'course-card';
                 courseCard.setAttribute('data-id', course.id);
                 
-                courseCard.innerHTML = `
+                // Only show admin actions if user is logged in as admin
+                const adminActions = isAdmin ? `
                     <div class="course-actions">
                         <button class="action-btn edit-btn" onclick="editCourse(${course.id})">
                             <i class="fas fa-edit"></i>
@@ -1133,6 +1264,10 @@
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
+                ` : '';
+                
+                courseCard.innerHTML = `
+                    ${adminActions}
                     <div class="course-icon">
                         <i class="fas ${course.icon}"></i>
                     </div>
@@ -1145,11 +1280,19 @@
                     </div>
                 `;
                 
-                courseCard.addEventListener('click', (e) => {
-                    if (!e.target.closest('.course-actions')) {
+                // Only allow clicking if not admin (to prevent accidental clicks on hidden buttons)
+                if (!isAdmin) {
+                    courseCard.addEventListener('click', () => {
                         showLessonContent(course);
-                    }
-                });
+                    });
+                } else {
+                    courseCard.addEventListener('click', (e) => {
+                        // Only show lesson content if not clicking on admin buttons
+                        if (!e.target.closest('.course-actions')) {
+                            showLessonContent(course);
+                        }
+                    });
+                }
                 
                 coursesContainer.appendChild(courseCard);
             });
@@ -1241,6 +1384,11 @@
 
         // Add new course
         function addNewCourse() {
+            if (!isAdmin) {
+                alert('Admin access required to add courses');
+                return;
+            }
+            
             const title = document.getElementById('courseTitle').value;
             const time = document.getElementById('courseTime').value;
             const subject = document.getElementById('courseSubject').value;
@@ -1276,17 +1424,20 @@
             hideAddCourseForm();
             resetForm();
             
-            // Show success message
+            // Show success message and sync
             alert('Course added successfully!');
+            syncWithCloud();
         }
 
         // Edit course
         function editCourse(id) {
+            if (!isAdmin) {
+                alert('Admin access required to edit courses');
+                return;
+            }
+            
             const course = courses.find(c => c.id === id);
             if (!course) return;
-            
-            // For simplicity, we'll just delete and re-add
-            deleteCourse(id);
             
             // Fill form with course data
             document.getElementById('courseTitle').value = course.title;
@@ -1298,15 +1449,24 @@
             uploadedImages = [...course.images];
             updateImagePreviews();
             
+            // Remove the course temporarily (will be re-added when saved)
+            courses = courses.filter(c => c.id !== id);
+            
             showAddCourseForm();
         }
 
         // Delete course
         function deleteCourse(id) {
+            if (!isAdmin) {
+                alert('Admin access required to delete courses');
+                return;
+            }
+            
             if (confirm('Are you sure you want to delete this course?')) {
                 courses = courses.filter(course => course.id !== id);
                 saveCourses();
                 renderCourses();
+                syncWithCloud();
                 
                 // Hide lesson content if it was showing the deleted course
                 document.getElementById('lessonContent').classList.remove('active');
@@ -1320,6 +1480,10 @@
 
         // Form visibility functions
         function showAddCourseForm() {
+            if (!isAdmin) {
+                alert('Admin access required to add courses');
+                return;
+            }
             document.getElementById('addCourseForm').style.display = 'block';
         }
 
@@ -1360,6 +1524,14 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data and sync with cloud
+            const savedCourses = JSON.parse(localStorage.getItem('courses'));
+            if (savedCourses) {
+                courses = savedCourses;
+            }
+            
+            // Sync with cloud on startup
+            syncWithCloud();
             renderCourses();
             
             // Add loading animation
@@ -1370,6 +1542,9 @@
                 document.body.style.opacity = '1';
             }, 100);
         });
+
+        // Auto-sync every 30 seconds
+        setInterval(syncWithCloud, 30000);
     </script>
 </body>
 </html>
